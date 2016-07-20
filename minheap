@@ -1,0 +1,259 @@
+public class Album 
+{
+	
+	private String title;
+	private String artist;
+	private String release_Date;
+	private String  total_time;
+	
+	
+	
+	Album()
+	{
+		title=null;
+		artist=null;
+		release_Date=null;
+		total_time=null;
+		
+	}
+	
+	
+	Album(String a,String t,String r,String to)
+	{
+		artist=a;
+		title=t;
+		release_Date=r;
+		total_time=to;
+		
+	}
+	
+	public String getTitle() 
+	{
+		return title;
+	}
+	public void setTitle(String title) 
+	{
+		this.title = title;
+	}
+	
+	public String getArtist() 
+	{
+		return artist;
+	}
+	public void setArtist(String artist) 
+	{
+		this.artist = artist;
+	}
+	
+	public String getRelease_Date() 
+	{
+		return release_Date;
+	}
+	public void setRelease_Date(String release_Date)
+	{
+		this.release_Date = release_Date;
+	}
+	
+	public String getTotal_time() 
+	{
+		return total_time;
+	}
+	public void setTotal_time(String total_time) 
+	{
+		this.total_time = total_time;
+	}
+
+}
+
+public class Min 
+{
+	
+	public static int[]Heap; //time array
+	public String[] Heap3;   //title array
+	
+	public Album Heap1=new Album();
+	private  int capacity;   //time array size
+	private int capacity2;   //title array size
+	private int pos;         //time array location
+	private int pos2;        //title array location   
+	
+	int child;  //int array child
+    int child2; //String array child
+    int parent;  //int array parent
+    int parent2; //String array parent 
+	
+	
+	
+	public Min() //constructor
+	{
+		pos=0;
+		pos2=0;    
+		capacity=11;
+		Heap=new int[capacity];
+		Heap3=new String[11];
+	}
+	
+	//METHOD OF CONVERT TIME
+	public int time(String h)  
+    {
+    	String[] h1=h.split(":");
+    	int hour = Integer.parseInt(h1[0].substring(1));
+    	int minute=Integer.parseInt(h1[1]);
+    	int second=Integer.parseInt(h1[2]);
+    	 
+    	        int temp;
+    	        temp = second + (60 * minute)+(3600 * hour);
+    	 
+    	        return temp;
+    	      	
+     }
+	
+	
+	//INSERT METHOD
+	public void insert(int value,String x)
+	{
+		if(pos==capacity)
+		{
+			
+		}
+		else
+		{
+			Heap[pos++]= value;
+			Heap3[pos2++]=x;
+		    child=pos-1;
+		    child2=pos2-1; //String array child
+		    parent=child/2;
+		    parent2=child2/2;
+		}
+	   	
+		while(Heap[parent]<Heap[child]&&parent>0)    
+	    {
+	    	int tmp=Heap[parent];
+	    	Heap[parent]=Heap[child];
+	    	Heap[child]=tmp;
+	    	
+	    	String temp=Heap3[parent2];
+	    	Heap3[parent2]=Heap3[child2];
+	    	Heap3[child2]=temp;
+	    	child=parent;
+	    	parent=child/2;
+	    	
+	    	child2=parent2;
+	    	parent2=child2/2;
+	    	
+	    }
+	     
+	    
+	}
+	//SORT METHOD STRING AND INTEGER ARRAY
+	 
+	public void sort(int arr[],String arr1[])
+    {
+        int n = arr.length;
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr,arr1, n, i);
+           
+        for (int i=n-1; i>=0; i--)
+        {
+            
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            
+            String tp = arr1[0];
+            arr1[0] = arr1[i];
+            arr1[i] = tp;
+            
+            
+            heapify(arr,arr1, i, 0);
+        }
+    }
+	
+ 
+    //MINHEAPIFY METHOD
+    void heapify(int arr[], String arr1[],int n, int i)
+    {
+        int min = i;  
+        int l = 2*i + 1;  
+        int r = 2*i + 2; 
+ 
+        
+        if (l < n && arr[l] > arr[min])
+            min = l;
+ 
+        if (r < n && arr[r] > arr[min])
+            min = r;
+ 
+        if (min != i)
+        {
+            int swap = arr[i];
+            arr[i] = arr[min];
+            arr[min] = swap;
+            
+            String sp = arr1[i];
+            arr1[i] = arr1[min];
+            arr1[min] = sp;
+            
+            heapify(arr, arr1,n, min);
+        }
+    }
+    //METHOD  OF PRINT
+ 	  public void print()
+		{
+		 
+	     sort(Heap,Heap3);
+	 
+			for(int i=1;i<capacity;i++)
+			{
+				
+				System.out.println(Heap[i]+" "+Heap3[i]);
+			}
+	
+			}
+	
+	
+}import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+
+
+public class Main 
+
+{ 
+	public static void main(String[] args) throws IOException {
+	 Min minHeap = new Min();
+	 Album a=new Album();
+	 
+		BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+		
+	    while (true)
+		{
+		    String line = reader.readLine();
+		    if (line != null) 
+		    {
+		    String []words=line.split(",");
+		    minHeap.Heap1.setTitle(words[0]);
+		    minHeap.Heap1.setArtist(words[1]);
+		    minHeap.Heap1.setRelease_Date(words[2]);
+		    minHeap.Heap1.setTotal_time(words[3]);
+		    
+			
+			
+  minHeap.insert(minHeap.time(minHeap.Heap1.getTotal_time()),minHeap.Heap1.getTitle());
+
+}
+		    else
+		    	break;
+		    
+		}
+		
+		 minHeap.print();
+
+   }
+
+}
+
+
+
+
